@@ -4,8 +4,8 @@ const path = require('path');
 
 app.on('ready', () => {
     const win = new BrowserWindow({
-        width: 800,
-        height: 530,
+        width: 900,
+        height: 600,
         minWidth: 550,
         minHeight: 320,
         autoHideMenuBar: true,
