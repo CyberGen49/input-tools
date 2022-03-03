@@ -178,6 +178,12 @@ p {
 #sidebar .item:focus {
     background: var(--bgL);
 }
+#sidebar .separator {
+    width: calc(100% - 60px);
+    height: 1px;
+    margin: 8px 30px;
+    background: var(--bgLLL);
+}
 
 /* Custom scrollabrs */
 ::-webkit-scrollbar {
