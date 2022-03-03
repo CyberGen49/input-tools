@@ -1,0 +1,205 @@
+
+@font-face {
+    font-family: 'Material Icons Outlined';
+    font-style: normal;
+    font-weight: 400;
+    src: url(fonts/MaterialIconsOutlined-Regular.otf) format('opentype');
+}
+@font-face {
+    font-family: 'Sora';
+    font-style: normal;
+    font-weight: 400;
+    src: url(fonts/Sora-Variable.ttf) format('truetype');
+}
+@font-face {
+    font-family: 'Sora';
+    font-style: normal;
+    font-weight: 700;
+    src: url(fonts/Sora-Variable.ttf) format('truetype');
+}
+@font-face {
+    font-family: 'Quicksand';
+    font-style: normal;
+    font-weight: 400;
+    src: url(fonts/Quicksand-Variable.ttf) format('truetype');
+}
+@font-face {
+    font-family: 'Quicksand';
+    font-style: normal;
+    font-weight: 700;
+    src: url(fonts/Quicksand-Variable.ttf) format('truetype');
+}
+
+:root {
+    --bgD: #1a1b1d;
+    --bg: #202124;
+    --bgL: #292a2e;
+    --bgLL: #43444B;
+    --bgLLL: #56575f;
+    --acc: #E4BAF8;
+    --fg: #fff;
+    --fgD: #d2d4e0;
+    --fgDD: #a7a8b1;
+    --fgErr: rgb(255, 104, 104);
+    --fgGood: rgb(122, 255, 104);
+}
+
+* {
+    font-family: "Sora", "Segoe UI", sans-serif;
+    color: var(--fg);
+    font-size: 16px;
+}
+
+body {
+    background: var(--bg);
+    user-select: none;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    margin: 0px;
+    padding: 0px;
+    margin-bottom: 0.4em;
+    margin-top: 0.2em;
+    font-family: "Quicksand";
+    font-weight: bold;
+}
+h1 { font-size: 32px; }
+h2 { font-size: 28px; }
+h3 { font-size: 24px; }
+h4 { font-size: 22px; }
+h5 { font-size: 18px; }
+h6 { font-size: 16px; }
+
+p {
+    margin: 0px;
+    padding: 0px;
+    margin-bottom: 0.5em;
+    line-height: 140%;
+}
+
+#titlebar {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: calc(100% - 12px);
+    height: 32px;
+    padding: 4px 6px;
+    z-index: 100;
+}
+#titlebar #drag {
+    width: 100%;
+    height: 100%;
+    -webkit-app-region: drag;
+    display: flex;
+    justify-content: right;
+    flex-wrap: nowrap;
+}
+#titlebar #drag .controlBtn {
+    width: 46px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Material Icons Outlined";
+    font-size: 16px;
+    -webkit-app-region: no-drag;
+    background: var(--bg);
+    color: var(--fgD);
+    border-radius: 6px;
+    transition: 0.1s ease-in-out;
+}
+#titlebar #drag .controlBtn:hover {
+    background: var(--bgLL);
+}
+#titlebar #drag #windowClose.controlBtn {
+    font-size: 18px;
+}
+#titlebar #drag #windowClose.controlBtn:hover {
+    background: var(--fgErr);
+    color: var(--bg);
+}
+
+#main {
+    position: fixed;
+    top: 40px;
+    left: 240px;
+    height: calc(100% - 32px - 20px);
+    width: calc(100% - 240px - 40px);
+    padding: 10px 20px;
+    padding-top: 0px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
+#sidebar {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 220px;
+    height: 100%;
+    padding: 16px 8px;
+    background: var(--bgD);
+    z-index: 5;
+}
+
+#sidebar .title {
+    font-family: "Quicksand";
+    font-weight: bold;
+    font-size: 24px;
+    padding: 12px 10px;
+}
+
+#sidebar .item {
+    width: 100%;
+    margin: 2px 0px;
+    padding: 10px 15px;
+    border-radius: 6px;
+    background: none;
+    border: none;
+    outline: none;
+    display: flex;
+    align-items: center;
+    transition: 0.1s ease-in-out;
+}
+#sidebar .item .icon {
+    font-family: "Material Icons Outlined";
+    font-size: 24px;
+    line-height: 100%;
+    color: var(--fgD);
+}
+#sidebar .item .name {
+    font-size: 16px;
+    line-height: 100%;
+    color: var(--fgD);
+    padding-left: 15px;
+    margin-top: 1px;
+}
+#sidebar .item:hover,
+#sidebar .item:focus {
+    background: var(--bgL);
+}
+
+/* Custom scrollabrs */
+::-webkit-scrollbar {
+    width: 15px;
+    height: 15px;
+}
+::-webkit-resizer {
+    background: rgba(0, 0, 0, 0);
+}
+::-webkit-scrollbar-thumb {
+    background: var(--fgDD);
+    border-radius: 100px;
+    background-clip: padding-box;
+    border: 6px solid rgba(0, 0, 0, 0);
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--fg);
+    background-clip: padding-box;
+    border: 4px solid rgba(0, 0, 0, 0);
+}
+::-webkit-scrollbar-thumb:active {
+    background: var(--acc);
+    background-clip: padding-box;
+    border: 4px solid rgba(0, 0, 0, 0);
+}
