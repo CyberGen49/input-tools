@@ -13,7 +13,7 @@
             <div class="controlBtn" id="windowMin" style="transform: rotate(180deg);" title="Minimize">
                 maximize
             </div>
-            <div class="controlBtn" id="windowMax" title="Maximize/unmaximize">
+            <div class="controlBtn hidden" id="windowMax" title="Maximize/unmaximize">
                 check_box_outline_blank
             </div>
             <div class="controlBtn" id="windowClose" title="Exit">
@@ -24,44 +24,112 @@
     <div id="sidebar">
         <div class="title">Input Tools</div>
         <button id="tabAutoClicker" class="item">
+            <div class="indicator"></div>
             <div class="icon">mouse</div>
             <div class="name">Auto-clicker</div>
         </button>
         <button id="tabMacros" class="item">
+            <div class="indicator"></div>
             <div class="icon">keyboard_alt</div>
             <div class="name">Keyboard macros</div>
         </button>
-        <button id="tabMacros" class="item">
+        <button id="tabRecorder" class="item">
+            <div class="indicator"></div>
             <div class="icon">fiber_smart_record</div>
             <div class="name">Input recorder</div>
         </button>
         <div class="separator"></div>
-        <button id="tabMacros" class="item">
+        <button id="tabSettings" class="item">
+            <div class="indicator"></div>
             <div class="icon">settings</div>
             <div class="name">Settings</div>
         </button>
-        <button id="tabMacros" class="item">
+        <button id="tabAbout" class="item">
+            <div class="indicator"></div>
             <div class="icon">info</div>
             <div class="name">About</div>
         </button>
     </div>
     <div id="main">
-        <h2 class="title">Auto-clicker</h2>
-        <p>
-            Mollis magna sem natoque aenean aenean consectetur lacinia aliquam pharetra. Consectetur nec hac litora pretium venenatis integer? Pharetra elementum ac ligula, ut blandit habitasse elit vivamus nibh habitasse. Mollis diam fusce volutpat cras. Nisi aliquet hendrerit dui ultrices, augue libero gravida mi gravida. Magnis sodales dignissim vivamus tincidunt dis viverra fermentum ut primis ornare!
+        <div id="sectionAutoClicker" class="section">
+            <h2>Auto-clicker</h2>
+            <div>
+                <div class="inlineBlock flex centerVertical" style="width: 180px;">
+                    Click interval
+                </div>
+                <div class="inlineBlock" style="width: 90px; margin-right: 3px;">
+                    <input id="autoClickDelay" type="number" class="textbox" value="100">
+                </div>
+                <div class="inlineBlock inputWrapper dropdown" style="width: 170px">
+                    <select id="autoClickUnit" class="textbox">
+                        <option value="ms" selected>Milliseconds</option>
+                        <option value="s">Seconds</option>
+                        <option value="m">Minutes</option>
+                        <option value="h">Hours</option>
+                    </select>
+                </div>
+            </div>
+            <div>
+                <div class="inlineBlock flex centerVertical" style="width: 180px">
+                    Mouse button
+                </div>
+                <div class="inlineBlock inputWrapper dropdown" style="width: 130px;">
+                    <select id="autoClickButton" class="textbox">
+                        <option value="left" selected>Left</option>
+                        <option value="middle">Middle</option>
+                        <option value="right">Right</option>
+                    </select>
+                </div>
+            </div>
+            <div>
+                <div class="inlineBlock flex centerVertical" style="width: 180px;">
+                    Click type
+                </div>
+                <div class="inlineBlock inputWrapper dropdown" style="width: 130px">
+                    <select id="autoClickType" class="textbox">
+                        <option value="true">Single</option>
+                        <option value="false">Double</option>
+                    </select>
+                </div>
+            </div>
+            <div>
+                <div class="inlineBlock flex centerVertical" style="width: 180px;">
+                    Shortcut
+                </div>
+                <div class="inlineBlock" style="width: 180px; margin-right: 3px;">
+                    <input id="autoClickDelay" type="number" class="textbox" disabled>
+                </div>
+                <div class="inlineBlock">
+                    <button class="btn">Change</button>
+                </div>
+            </div>
+            <div style="height: 15px;"></div>
+            <button id="autoClickStart" class="btn">Start</button>
+            <button id="autoClickStop" class="btn" disabled>Stop</button>
+        </div>
+        <div id="sectionMacros" class="section">
+            <h2>Keyboard macros</h2>
+        </div>
+        <div id="sectionRecorder" class="section">
+            <h2>Input recorder</h2>
+        </div>
+        <div id="sectionSettings" class="section">
+            <h2>Settings</h2>
+        </div>
+        <div id="sectionAbout" class="section">
+            <h2>About</h2>
+            <p>Input Tools is developed with ❤ by CyberGen49, and is completely open-source!</p>
+            <p>If you come across any bugs or have features you'd like to suggest, feel free to create an issue over on GitHub. You can also DM me on Discord <b>@Cyber#1000</b> with any questions or concerns.</p>
+            <p>Enjoy!</p>
+            <p><a href="https://github.com/CyberGen49/input-tools">Input Tools GitHub Repository</a></p>
+            <p style="color: var(--fgD)">
+                Node.js <span id="versionNode"></span>
+                <br>
+                Electron <span id="versionElectron"></span>
+                <br>
+                Chromium <span id="versionChrome"></span>
             </p>
-            <p>
-            Felis id vestibulum suspendisse, maecenas dignissim luctus pretium. Ipsum sagittis consectetur erat nostra vivamus; justo nullam duis ultrices ipsum mus non. A dignissim vivamus, duis vivamus ipsum suscipit litora. Justo nec urna primis penatibus cras litora nam. Mollis lacus magnis fames senectus iaculis aptent fringilla mauris purus dictumst orci. Netus curabitur dis ultrices dui tempor erat a commodo quisque etiam conubia. Curae; ligula ante, augue mi nullam ad convallis lacus sapien metus mollis egestas. Ornare faucibus dis integer class in metus massa nullam turpis massa nullam.
-            </p>
-            <p>
-            Blandit ante tempus integer. Odio dolor, mi hac curae; lacinia elit tempus parturient! Nec phasellus dictum hac sollicitudin id. Quam felis blandit litora tortor suspendisse. Fames, sodales eros dui tortor sociis orci rutrum senectus. Vitae litora netus cursus in ad vel suspendisse. Nascetur sed facilisis aliquam inceptos id. Fusce libero eros fusce morbi inceptos molestie ultricies odio tempor duis dapibus egestas. Nullam lacinia consectetur; torquent proin feugiat taciti tempor. Nullam.
-            </p>
-            <p>
-            Mattis litora feugiat rhoncus ridiculus parturient tincidunt sociosqu consequat nullam. Nec mi vel ac eleifend vulputate elementum ligula vulputate habitant interdum himenaeos. Tempor fames ut lobortis porttitor elementum, duis molestie! Accumsan accumsan curae; mollis sociosqu dolor condimentum sagittis diam nam. Vel enim blandit primis. Class semper, torquent aliquet. Elit cum fermentum vitae dictumst orci imperdiet. Suscipit netus urna cras.
-            </p>
-            <p>
-            Sapien ultrices metus neque. Cras posuere facilisis malesuada elit leo fames consectetur. Convallis netus vivamus quis. Quis ullamcorper purus nulla potenti porttitor. Quisque justo mollis aenean aptent dis vehicula lacus iaculis justo bibendum. Neque, conubia ante nullam platea aliquam cum euismod amet rutrum platea dignissim. Sagittis arcu enim mattis, dui parturient nullam est commodo enim mauris natoque. Curae; ridiculus adipiscing sociosqu pulvinar cras id suspendisse enim est proin. Inceptos.
-            </p>
+        </div>
     </div>
     <script src="main.js"></script>
 </body>
