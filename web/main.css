@@ -99,6 +99,12 @@ a:hover, a:focus {
     text-decoration: underline;
 }
 
+small {
+    font-size: 14px;
+    line-height: 1;
+    color: var(--fgDD);
+}
+
 span {
     color: inherit;
 }
@@ -247,11 +253,16 @@ span {
     margin-top: 0px;
 }
 
+.settingName {}
+.settingDesc {
+    padding-top: 2px;
+}
+
 .btn {
     box-sizing: border-box;
-    height: 36px;
+    height: 38px;
     margin: 3px;
-    padding: 0px 16px;
+    padding: 1px 16px 2px 16px;
     background: var(--acc);
     color: var(--bg);
     font-size: 15px;
@@ -263,12 +274,12 @@ span {
 }
 .btn:hover:not(:disabled),
 .btn:focus:not(:disabled) {
-    background: var(--accL);
-    border-color: var(--accL);
+    background: var(--fgD);
+    border-color: var(--fgD);
 }
 .btn:active:not(:disabled) {
-    background: var(--accLL);
-    border-color: var(--accLL);
+    background: var(--fg);
+    border-color: var(--fg);
 }
 .btn:disabled {
     background: var(--bgL);
@@ -332,6 +343,7 @@ span {
 .hidden { display: none; }
 .flex { display: flex; }
 .flex.centerVertical { align-items: center; }
+.flex.topVertical { align-items: flex-start; }
 .inlineBlock { display: inline-block; }
 .inline { display: inline; }
 .contPad {

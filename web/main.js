@@ -25,6 +25,14 @@ window.addEventListener('load', async () => {
     _id('windowMin').addEventListener('click', async () => {
         await main.invokeIpc('minWindow');
     });
+    // Adjust anchors
+    const anchors = document.getElementsByTagName('a');
+    for (i = 0; i < anchors.length; i++) {
+        anchors[i].target = '_blank';
+        anchors[i].addEventListener('click', () => {
+            anchors[i].blur();
+        });
+    }
     // Handle sections
     const sections = _id('main').getElementsByClassName('section');
     const tabs = _id('sidebar').getElementsByClassName('item');
@@ -61,35 +69,37 @@ window.addEventListener('load', async () => {
     });
     showSection('AutoClicker');
     // Handle the auto clicker
-    _id('autoClickDelay').addEventListener('change', () => {
-        const el = _id('autoClickDelay');
+    _id('autoClickInterval').addEventListener('change', () => {
+        const el = _id('autoClickInterval');
         let value = el.value;
         let valueInt = parseInt(value);
         if (value === '') el.value = 1;
         if (valueInt > 100000) el.value = 99999;
     });
     _id('autoClickStart').addEventListener('click', async () => {
+        _id('autoClickStart').disabled = true;
         await main.invokeIpc('autoClicker', {
             status: 'start',
             button: _id('autoClickButton').value,
             double: JSON.parse(_id('autoClickType').value),
-            delay: (() => {
+            interval: (() => {
                 if (_id('autoClickUnit').value === 'ms')
-                    return parseInt(_id('autoClickDelay').value);
+                    return parseInt(_id('autoClickInterval').value);
                 if (_id('autoClickUnit').value === 's')
-                    return (parseInt(_id('autoClickDelay').value)*1000);
+                    return (parseInt(_id('autoClickInterval').value)*1000);
                 if (_id('autoClickUnit').value === 'm')
-                    return (parseInt(_id('autoClickDelay').value)*(1000*60));
+                    return (parseInt(_id('autoClickInterval').value)*(1000*60));
                 if (_id('autoClickUnit').value === 'h')
-                    return (parseInt(_id('autoClickDelay').value)*(1000*60*60));
+                    return (parseInt(_id('autoClickInterval').value)*(1000*60*60));
             })()
         });
-        _id('autoClickStart').disabled = true;
         _id('autoClickStop').disabled = false;
+        new Notification('Auto-clicking started!');
     });
     _id('autoClickStop').addEventListener('click', async () => {
-        await main.invokeIpc('autoClicker', { status: 'stop' });
         _id('autoClickStart').disabled = false;
+        await main.invokeIpc('autoClicker', { status: 'stop' });
         _id('autoClickStop').disabled = true;
+        new Notification('Auto-clicking stopped!');
     });
 });

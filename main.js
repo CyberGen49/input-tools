@@ -1,21 +1,14 @@
 
-const { app, BrowserWindow, globalShortcut, ipcMain } = require('electron');
+const { app, BrowserWindow, globalShortcut, ipcMain, shell } = require('electron');
 const path = require('path');
-const fs = require('fs');
-const robot = require('robotjs');
-const EventEmitter = require('events')
-const autoClickEmitter = new EventEmitter();
+const { spawn } = require('child_process');
 
-console.log(`Node.js version: ${process.versions.node}`);
-console.log(`Electron version: ${process.versions.electron}`);
-console.log(`Chromium version: ${process.versions.chrome}`);
+// See the "About" tab in the main window for program versions
 
 app.on('ready', () => {
     const win = new BrowserWindow({
         width: 900,
         height: 600,
-        //minWidth: 550,
-        //minHeight: 320,
         minWidth: 900,
         minHeight: 600,
         transparent: false,
@@ -24,7 +17,7 @@ app.on('ready', () => {
         show: false,
         icon: 'icon.png',
         webPreferences: {
-            preload: path.join(__dirname, 'preload.js')
+            preload: path.join(__dirname, 'web/preload.js')
         }
     });
     // Load the HTML file
@@ -35,36 +28,36 @@ app.on('ready', () => {
     ipcMain.handle('toggleMaxWindow', () => {
         if (win.isMaximized()) win.unmaximize(); else win.maximize();
     });
+    // Handle opening external links
+    win.webContents.setWindowOpenHandler(({ url }) => {
+        shell.openExternal(url);
+        return { action: 'deny' };
+    });
     // Handle the auto clicker
-    let autoClickInterval;
-    let autoClickTimeout;
     let autoClickStatus = false;
-    let autoClickLastClick = 0;
+    let autoClickProcess;
     ipcMain.handle('autoClicker', (event, opts) => {
         if (opts.status == 'start' && !autoClickStatus) {
-            autoClickInterval = setInterval(() => {
-                if (Date.now() > (autoClickLastClick+opts.delay)) {
-                    autoClickLastClick = Date.now();
-                    autoClickEmitter.emit('click', opts);
-                    //console.log(`Click took ${Date.now()-autoClickLastClick}ms`);
-                }
-            }, 1);
-            console.log('Started autoclicker:', opts);
+            autoClickProcess = spawn('autoclick-cli.exe', [
+                '--run',
+                '--button', opts.button,
+                '--interval', opts.interval,
+                '--double', new Boolean(opts.double).toString(),
+            ]);
+            autoClickProcess.stdout.on('data', (data) => {
+                console.log(data.toString());
+            });
             autoClickStatus = true;
         }
         if (opts.status == 'stop' && autoClickStatus) {
-            clearInterval(autoClickInterval);
-            clearTimeout(autoClickTimeout);
-            console.log('Stopped autoclicker:', opts);
+            autoClickProcess.kill();
             autoClickStatus = false;
         }
-    });
-    autoClickEmitter.on('click', (opts) => {
-        robot.mouseClick(opts.button, opts.double);
-        console.log('Clicked');
     });
     // Show the window once it's fully loaded
     win.once('ready-to-show', () => {
         win.show();
     });
+    // Quit the app if the main window is closed
+    win.on('close', () => { app.quit() });
 });
