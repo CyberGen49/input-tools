@@ -1,20 +1,37 @@
 {
   "name": "input-tools",
-  "version": "1.0.0",
+  "version": "0.5.0",
   "description": "A set of tools for automating mouse and keyboard clicks.",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "package": "electron-builder"
   },
-  "author": "CyberOfficial",
+  "author": "CyberGen49",
   "license": "ISC",
   "devDependencies": {
     "electron": "^17.0.0",
-    "electron-rebuild": "^3.2.7"
+    "electron-builder": "^22.14.13"
+  },
+  "build": {
+    "appId": "org.simplecyber.inputTools",
+    "productName": "Input Tools",
+    "win": {
+      "target": [
+        "portable"
+      ],
+      "icon": "icon.png",
+      "publisherName": "CyberGen49"
+    },
+    "files": [
+      "!robot/*"
+    ],
+    "asarUnpack": [
+      "robot.exe"
+    ]
   },
   "dependencies": {
-    "electron-packager": "^15.4.0",
-    "node-abi": "^3.8.0",
-    "robotjs": "^0.6.0"
+    "cli-color": "^2.0.1",
+    "ws": "^8.5.0"
   }
 }

@@ -340,12 +340,18 @@ span {
     color: rgba(255, 255, 255, 0.8);
 }
 
-.hidden { display: none; }
 .flex { display: flex; }
 .flex.centerVertical { align-items: center; }
 .flex.topVertical { align-items: flex-start; }
+.flex.row {
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 6px;
+}
 .inlineBlock { display: inline-block; }
 .inline { display: inline; }
+.block { display: block; }
+.hidden { display: none; }
 .contPad {
     margin: 3px;
     box-sizing: border-box;

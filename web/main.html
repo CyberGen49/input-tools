@@ -53,14 +53,12 @@
     <div id="main">
         <div id="sectionAutoClicker" class="section">
             <h2>Auto-clicker</h2>
-            <div>
-                <div class="inlineBlock flex centerVertical" style="width: 180px;">
-                    Click interval
-                </div>
-                <div class="inlineBlock" style="width: 90px; margin-right: 3px;">
+            <div class="flex row centerVertical">
+                <div style="width: 180px">Click interval</div>
+                <div style="width: 90px">
                     <input id="autoClickInterval" type="number" class="textbox" value="100">
                 </div>
-                <div class="inlineBlock inputWrapper dropdown" style="width: 170px">
+                <div class="inputWrapper dropdown" style="width: 170px">
                     <select id="autoClickUnit" class="textbox">
                         <option value="ms" selected>Milliseconds</option>
                         <option value="s">Seconds</option>
@@ -69,11 +67,9 @@
                     </select>
                 </div>
             </div>
-            <div>
-                <div class="inlineBlock flex centerVertical" style="width: 180px">
-                    Mouse button
-                </div>
-                <div class="inlineBlock inputWrapper dropdown" style="width: 130px;">
+            <div class="flex row centerVertical">
+                <div style="width: 180px">Mouse button</div>
+                <div class="inputWrapper dropdown" style="width: 130px">
                     <select id="autoClickButton" class="textbox">
                         <option value="left" selected>Left</option>
                         <option value="middle">Middle</option>
@@ -81,27 +77,35 @@
                     </select>
                 </div>
             </div>
-            <div>
-                <div class="inlineBlock flex centerVertical" style="width: 180px;">
-                    Click type
-                </div>
-                <div class="inlineBlock inputWrapper dropdown" style="width: 130px">
+            <div class="flex row centerVertical">
+                <div style="width: 180px">Click type</div>
+                <div class="inputWrapper dropdown" style="width: 130px">
                     <select id="autoClickType" class="textbox">
-                        <option value="true">Single</option>
-                        <option value="false">Double</option>
+                        <option value="false">Single</option>
+                        <option value="true">Double</option>
                     </select>
                 </div>
             </div>
-            <div>
-                <div class="inlineBlock flex centerVertical" style="width: 180px;">
-                    Shortcut
+            <div class="flex row centerVertical">
+                <div style="width: 180px">Timeout</div>
+                <div id="autoClickTimeoutCont" class="hidden" style="width: 90px;">
+                    <input id="autoClickTimeout" type="number" class="textbox" value="1">
                 </div>
-                <div class="inlineBlock" style="width: 180px; margin-right: 3px;">
+                <div class="inputWrapper dropdown" style="width: 170px">
+                    <select id="autoClickTimeoutUnit" class="textbox">
+                        <option value="none" selected>Infinite</option>
+                        <option value="s">Seconds</option>
+                        <option value="m">Minutes</option>
+                        <option value="h">Hours</option>
+                    </select>
+                </div>
+            </div>
+            <div class="flex row centerVertical">
+                <div style="width: 180px">Shortcut</div>
+                <div style="width: 180px">
                     <input type="text" class="textbox" disabled>
                 </div>
-                <div class="inlineBlock">
-                    <button class="btn">Change</button>
-                </div>
+                <button class="btn">Change</button>
             </div>
             <div style="height: 15px;"></div>
             <button id="autoClickStart" class="btn">Start</button>
@@ -138,12 +142,19 @@
             <p>If you come across any bugs or have features you'd like to request, feel free to <a href="https://github.com/CyberGen49/input-tools/issues">create an issue</a> over on GitHub. You can also DM me on Discord <b>@Cyber#1000</b> with any questions or concerns.</p>
             <p>Enjoy!</p>
             <p><a href="https://github.com/CyberGen49/input-tools">Input Tools GitHub Repository</a></p>
+            <h5>Component versions</h5>
             <p style="color: var(--fgD)">
                 Node.js <span id="versionNode"></span>
                 <br>
                 Electron <span id="versionElectron"></span>
                 <br>
                 Chromium <span id="versionChrome"></span>
+            </p>
+            <h5>What does what?</h5>
+            <p style="color: var(--fgD)">
+                <a href="https://www.electronjs.org/">Electron</a> handles the app interface
+                <br>
+                <a href="https://github.com/octalmage/robotjs">RobotJS</a> handles mouse and keyboard automation
             </p>
         </div>
     </div>

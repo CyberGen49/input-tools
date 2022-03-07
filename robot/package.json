@@ -1,0 +1,17 @@
+{
+  "name": "robot",
+  "version": "1.0.0",
+  "description": "An independent environment for handling RobotJS",
+  "main": "main.js",
+  "scripts": {
+    "start": "node main.js",
+    "build": "pkg -t latest-win-x64 -o ..\\robot main.js"
+  },
+  "author": "CyberGen49",
+  "license": "ISC",
+  "dependencies": {
+    "cli-color": "^2.0.1",
+    "robotjs": "^0.6.0",
+    "ws": "^8.5.0"
+  }
+}

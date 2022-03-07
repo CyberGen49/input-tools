@@ -1,5 +1,6 @@
 
 const main = window.electronAPI;
+const ipcRenderer = main.ipcRenderer;
 
 // Shorthand function for *.getElementById()
 function _id(id, ancestor = document) {
@@ -8,6 +9,13 @@ function _id(id, ancestor = document) {
 
 // On app load
 window.addEventListener('load', async () => {
+    // Connect to main websocket
+    const ws = new WebSocket(`ws://localhost:31264`);
+    ws.addEventListener('open', () => {
+        console.log(`Connected to main websocket`);
+    });
+
+    // Adjust buttons
     let buttons = document.getElementsByTagName('button');
     for (i = 0; i < buttons.length; i++) {
         let button = buttons[i];
@@ -15,16 +23,6 @@ window.addEventListener('load', async () => {
             button.blur();
         });
     }
-    // Handle control buttons
-    _id('windowClose').addEventListener('click', async () => {
-        await main.invokeIpc('closeWindow');
-    });
-    _id('windowMax').addEventListener('click', async () => {
-        await main.invokeIpc('toggleMaxWindow');
-    });
-    _id('windowMin').addEventListener('click', async () => {
-        await main.invokeIpc('minWindow');
-    });
     // Adjust anchors
     const anchors = document.getElementsByTagName('a');
     for (i = 0; i < anchors.length; i++) {
@@ -33,6 +31,18 @@ window.addEventListener('load', async () => {
             anchors[i].blur();
         });
     }
+
+    // Handle control buttons
+    _id('windowClose').addEventListener('click', async () => {
+        ws.send(JSON.stringify({ to: 'main', action: 'closeWindow' }));
+    });
+    _id('windowMax').addEventListener('click', async () => {
+        ws.send(JSON.stringify({ to: 'main', action: 'toggleMaxWindow' }));
+    });
+    _id('windowMin').addEventListener('click', async () => {
+        ws.send(JSON.stringify({ to: 'main', action: 'minWindow' }));
+    });
+
     // Handle sections
     const sections = _id('main').getElementsByClassName('section');
     const tabs = _id('sidebar').getElementsByClassName('item');
@@ -68,18 +78,27 @@ window.addEventListener('load', async () => {
         });
     });
     showSection('AutoClicker');
+
     // Handle the auto clicker
-    _id('autoClickInterval').addEventListener('change', () => {
-        const el = _id('autoClickInterval');
-        let value = el.value;
-        let valueInt = parseInt(value);
-        if (value === '') el.value = 1;
-        if (valueInt > 100000) el.value = 99999;
+    ['autoClickInterval', 'autoClickTimeout'].forEach((id) => {
+        _id(id).addEventListener('change', (el) => {
+            el = el.target;
+            let value = el.value;
+            let valueInt = parseInt(value);
+            if (value === '' || valueInt < 1) el.value = 1;
+            if (valueInt > 100000) el.value = 99999;
+        });
+    });
+    _id('autoClickTimeoutUnit').addEventListener('change', (el) => {
+        el = el.target;
+        if (el.value == 'none')
+            _id('autoClickTimeoutCont').classList.add('hidden');
+        else
+            _id('autoClickTimeoutCont').classList.remove('hidden');
     });
     _id('autoClickStart').addEventListener('click', async () => {
         _id('autoClickStart').disabled = true;
-        await main.invokeIpc('autoClicker', {
-            status: 'start',
+        ws.send(JSON.stringify({ to: 'robot', action: 'startAutoClick', opts: {
             button: _id('autoClickButton').value,
             double: JSON.parse(_id('autoClickType').value),
             interval: (() => {
@@ -91,15 +110,37 @@ window.addEventListener('load', async () => {
                     return (parseInt(_id('autoClickInterval').value)*(1000*60));
                 if (_id('autoClickUnit').value === 'h')
                     return (parseInt(_id('autoClickInterval').value)*(1000*60*60));
+            })(),
+            timeout: (() => {
+                if (_id('autoClickTimeoutUnit').value === 's')
+                    return (parseInt(_id('autoClickTimeout').value));
+                if (_id('autoClickTimeoutUnit').value === 'm')
+                    return (parseInt(_id('autoClickTimeout').value)*(60));
+                if (_id('autoClickTimeoutUnit').value === 'h')
+                    return (parseInt(_id('autoClickTimeout').value)*(60*60));
+                return false;
             })()
-        });
-        _id('autoClickStop').disabled = false;
-        new Notification('Auto-clicking started!');
+        }}));
+        //new Notification('Auto-clicking started!');
     });
     _id('autoClickStop').addEventListener('click', async () => {
-        _id('autoClickStart').disabled = false;
-        await main.invokeIpc('autoClicker', { status: 'stop' });
         _id('autoClickStop').disabled = true;
-        new Notification('Auto-clicking stopped!');
+        ws.send(JSON.stringify({ to: 'robot', action: 'stopAutoClick' }));
+        //new Notification('Auto-clicking stopped!');
+    });
+
+    // Handle incoming websocket messages
+    ws.addEventListener('message', async(event) => {
+        const data = JSON.parse(await event.data.text());
+        if (data.to == 'renderer') {
+            console.log('WS:', data);
+            if (data.action == 'autoClickStarted') {
+                _id('autoClickStop').disabled = false;
+            }
+            if (data.action == 'autoClickStopped') {
+                _id('autoClickStop').click();
+                _id('autoClickStart').disabled = false;
+            }
+        }
     });
 });
