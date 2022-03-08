@@ -3,8 +3,11 @@ const robot = require('robotjs');
 const WebSocket = require('ws').WebSocket;
 const clc = require('cli-color');
 
+let ws;
+let wsSend;
 function connectWs() {
-    const ws = new WebSocket(`ws://localhost:31264`);
+    ws = new WebSocket(`ws://localhost:31264`);
+    wsSend = (data) => { ws.send(JSON.stringify(data)) };
     ws.on('open', () => {
         console.log(clc.blueBright('Robot:'), `Connected to main websocket`);
     });
@@ -20,9 +23,11 @@ function connectWs() {
         const data = JSON.parse(dataRaw);
         if (data.to == 'robot') {
             if (data.action == 'startAutoClick')
-                startAutoClick(data.opts, ws);
+                startAutoClick(data.opts);
             if (data.action == 'stopAutoClick')
-                stopAutoClick(ws);
+                stopAutoClick();
+            if (data.action == 'getReadyStatus')
+                wsSend({ to: 'renderer', action: 'robotReadyStatus', status: true });
         }
     });
 }
@@ -30,7 +35,9 @@ connectWs();
 
 // Handle the autoclicker
 let autoClickInterval;
-function startAutoClick(opts, ws) {
+let autoClickStatus = false;
+function startAutoClick(opts) {
+    if (autoClickStatus) return;
     let timeoutTime = ((opts.timeout) ? (Date.now()+(opts.timeout*1000)) : null);
     let lastClick = 0;
     const click = () => {
@@ -43,10 +50,13 @@ function startAutoClick(opts, ws) {
     };
     autoClickInterval = setInterval(click, 1); click();
     console.log(clc.blueBright('Robot:'), `Auto-clicking started on an interval of ${opts.interval}ms`, ((opts.timeout) ? `for ${opts.timeout}s`:'with no timeout'));
-    ws.send(JSON.stringify({ to: 'renderer', action: 'autoClickStarted' }));
+    wsSend({ to: 'renderer', action: 'autoClickStarted' });
+    autoClickStatus = true;
 }
-function stopAutoClick(ws) {
+function stopAutoClick() {
+    if (!autoClickStatus) return;
     clearInterval(autoClickInterval);
     console.log(clc.blueBright('Robot:'), `Auto-clicking stopped`);
-    ws.send(JSON.stringify({ to: 'renderer', action: 'autoClickStopped' }));
+    wsSend({ to: 'renderer', action: 'autoClickStopped' });
+    autoClickStatus = false;
 }
