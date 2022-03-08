@@ -103,8 +103,8 @@
             </div>
             <div class="flex row centerVertical">
                 <div style="width: 180px">Shortcut</div>
-                <div style="width: 180px">
-                    <input type="text" class="textbox" disabled>
+                <div>
+                    <div id="autoClickShortcut" class="textbox flex centerVertical" disabled>...</div>
                 </div>
                 <button id="autoClickChangeShortcut" class="btn">Change</button>
             </div>
@@ -131,12 +131,15 @@
             <p>If you come across any bugs or have features you'd like to request, feel free to <a href="https://github.com/CyberGen49/input-tools/issues">create an issue</a> over on GitHub. You can also DM me on Discord <b>@Cyber#1000</b> with any questions or concerns.</p>
             <p>Enjoy!</p>
             <p><a href="https://github.com/CyberGen49/input-tools">Input Tools GitHub Repository</a></p>
-            <h5>Storage location</h5>
-            <p style="color: var(--fgD); user-select: text;">
-                <span id="userDataDir">Loading...</span>
-                <br><a onClick="copyText(_id('userDataDir').innerText)">Copy</a>
+            <h4>Storage location</h4>
+            <p>
+                This folder contains everything you've customized within Input Tools. If you want to transfer your settings, macros, and input recordings to another device, this is the folder you'll want to copy over.
             </p>
-            <h5>Components</h5>
+            <p style="color: var(--fgD)">
+                <span id="userDataDir">Loading...</span>
+                <br><a id="openDataFolder">Open folder</a>
+            </p>
+            <h4>Components</h4>
             <p id="components" style="color: var(--fgD)"></p>
         </div>
     </div>

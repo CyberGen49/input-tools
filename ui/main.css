@@ -42,6 +42,7 @@
     --bgL: #292a2e;
     --bgLL: #43444B;
     --bgLLL: #56575f;
+    --bgfg: #73747c;
     --fgDDD: #898a92;
     --fgDD: #a7a8b1;
     --fgD: #d2d4e0;
@@ -389,7 +390,6 @@ span {
 
 .inputWrapper {
     position: relative;
-    box-sizing: border-box;
 }
 .inputWrapper::after {
     position: absolute;
@@ -465,7 +465,7 @@ span {
 
 /* Custom text highlight */
 ::selection {
-    background: rgba(255, 255, 255, 0.3);
+    background: var(--bgLLL);
 }
 
 /* Custom scrollabrs */

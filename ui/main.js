@@ -106,6 +106,7 @@ window.addEventListener('load', async () => {
                 Object.keys(userData.versions).sort().forEach((key) => {
                     _id('components').innerHTML += `<span style="color: var(--fgDD)">${key}</span>&nbsp;&nbsp;&nbsp;${userData.versions[key]}<br>`;
                 });
+                _id('autoClickShortcut').innerText = userData.autoClick.shortcut.join(' + ');
                 showSection('AutoClicker');
             }
             // Handle auto-click keyboard shortcut
@@ -359,15 +360,17 @@ window.addEventListener('load', async () => {
             let display = selName;
             if (_id('keybindShift').classList.contains('selected')) {
                 display = `Shift + ${display}`;
-                finalShortcut.push('Shift');
+                finalShortcut.unshift('Shift');
+                // Using unshift instead of push on purpose, so we save the shortcut
+                // the same way it's displayed (by prepending to the front)
             }
             if (_id('keybindAlt').classList.contains('selected')) {
                 display = `Alt + ${display}`;
-                finalShortcut.push('Alt');
+                finalShortcut.unshift('Alt');
             }
             if (_id('keybindCtrl').classList.contains('selected')) {
                 display = `Ctrl + ${display}`;
-                finalShortcut.push('CommandOrControl');
+                finalShortcut.unshift('CommandOrControl');
             }
             _id('keyInputCont').innerHTML = (display === '') ? '&nbsp;':display;
             if (selValue !== '') {
@@ -404,5 +407,9 @@ window.addEventListener('load', async () => {
             console.log(`Final shortcut:`, finalShortcut.join('+'));
             _id(id).click();
         });
+    });
+
+    _id('openDataFolder').addEventListener('click', () => {
+        wsSend({ to: 'main', action: 'openDataFolder' });
     });
 });

@@ -6,7 +6,28 @@ const path = require('path');
 const clc = require('cli-color');
 const fs = require('fs');
 
-// See the "About" tab in the main window for program versions
+const isObject = (item) => {
+    return (item && typeof item === 'object' && !Array.isArray(item));
+}
+const mergeDeep = (target, ...sources) => {
+    if (!sources.length) return target;
+    const source = sources.shift();
+    if (isObject(target) && isObject(source)) {
+        for (const key in source) {
+            if (isObject(source[key])) {
+                if (!target[key]) Object.assign(target, {
+                    [key]: {}
+                });
+                mergeDeep(target[key], source[key]);
+            } else {
+                Object.assign(target, {
+                    [key]: source[key]
+                });
+            }
+        }
+    }
+    return mergeDeep(target, ...sources);
+}
 
 // Nothing happens until Electron is ready
 app.on('ready', () => {
@@ -14,14 +35,23 @@ app.on('ready', () => {
     const primaryDisplay = screen.getPrimaryDisplay();
     const dataDir = app.getPath('userData');
     // Compile user data
+    let targetStructureVersion = 1;
     let userData = {
-        dataDir: dataDir,
-        versions: process.versions
+        structureVersion: targetStructureVersion,
+            // If the version of the settings file doesn't match, we won't load it
+        dataDir: dataDir,  
+        versions: process.versions,
+        autoClick: {
+            shortcut: ['Ctrl', 'Alt', 'A']
+        }
     };
     if (fs.existsSync(path.join(dataDir, 'settings.json'))) {
-        Object.assign(userData, JSON.stringify(fs.readFileSync(path.join(dataDir, 'settings.json'))));
-        console.log(clc.greenBright('Main:'), `Loaded data from settings.json`);
-    } else  console.log(clc.greenBright('Main:'), `settings.json doesn't exist, so no data was loaded`);
+        let dataFromFile = JSON.stringify(fs.readFileSync(path.join(dataDir, 'settings.json')));
+        if (dataFromFile.structureVersion === targetStructureVersion) {
+            mergeDeep(userData, dataFromFile);
+            console.log(clc.greenBright('Main:'), `Loaded data from settings.json`);
+        } console.log(clc.greenBright('Main:'), `settings.json doesn't match targetStructureVersion, so it wasn't loaded`);
+    } else console.log(clc.greenBright('Main:'), `settings.json doesn't exist, so no data was loaded`);
 
     // Build the main window
     const ui = new BrowserWindow({
@@ -95,6 +125,10 @@ app.on('ready', () => {
                 // Handle sending user data to renderer
                 if (data.action == 'getData') {
                     wss.broadcast({ to: 'renderer', action: 'userData', data: userData });
+                }
+                // Handle opening the data folder
+                if (data.action == 'openDataFolder') {
+                    shell.openPath(dataDir);
                 }
                 // Handle the auto-click overlay
                 if (data.action == 'showAutoClickPopup') overlay.show();
