@@ -1,6 +1,6 @@
 {
   "name": "input-tools",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "A set of tools for automating mouse and keyboard clicks.",
   "main": "main.js",
   "scripts": {
@@ -12,6 +12,10 @@
   "devDependencies": {
     "electron": "^17.0.0",
     "electron-builder": "^22.14.13"
+  },
+  "dependencies": {
+    "cli-color": "^2.0.1",
+    "ws": "^8.5.0"
   },
   "build": {
     "appId": "org.simplecyber.inputTools",
@@ -29,9 +33,5 @@
     "asarUnpack": [
       "robot.exe"
     ]
-  },
-  "dependencies": {
-    "cli-color": "^2.0.1",
-    "ws": "^8.5.0"
   }
 }

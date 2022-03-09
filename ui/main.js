@@ -77,6 +77,97 @@ function hidePopup(id, onClose = () => {}) {
 
 // On app load
 window.addEventListener('load', async () => {
+    let keys = [
+        { value: 'A', code: 'KeyA', name: 'value' },
+        { value: 'B', code: 'KeyB', name: 'value' },
+        { value: 'C', code: 'KeyC', name: 'value' },
+        { value: 'D', code: 'KeyD', name: 'value' },
+        { value: 'E', code: 'KeyE', name: 'value' },
+        { value: 'F', code: 'KeyF', name: 'value' },
+        { value: 'G', code: 'KeyG', name: 'value' },
+        { value: 'H', code: 'KeyH', name: 'value' },
+        { value: 'I', code: 'KeyI', name: 'value' },
+        { value: 'J', code: 'KeyJ', name: 'value' },
+        { value: 'K', code: 'KeyK', name: 'value' },
+        { value: 'L', code: 'KeyL', name: 'value' },
+        { value: 'M', code: 'KeyM', name: 'value' },
+        { value: 'N', code: 'KeyN', name: 'value' },
+        { value: 'O', code: 'KeyO', name: 'value' },
+        { value: 'P', code: 'KeyP', name: 'value' },
+        { value: 'Q', code: 'KeyQ', name: 'value' },
+        { value: 'R', code: 'KeyR', name: 'value' },
+        { value: 'S', code: 'KeyS', name: 'value' },
+        { value: 'T', code: 'KeyT', name: 'value' },
+        { value: 'U', code: 'KeyU', name: 'value' },
+        { value: 'V', code: 'KeyV', name: 'value' },
+        { value: 'W', code: 'KeyW', name: 'value' },
+        { value: 'X', code: 'KeyX', name: 'value' },
+        { value: 'Y', code: 'KeyY', name: 'value' },
+        { value: 'Z', code: 'KeyZ', name: 'value' },
+        { value: '0', code: 'Digit0', name: 'value' },
+        { value: '1', code: 'Digit1', name: 'value' },
+        { value: '2', code: 'Digit2', name: 'value' },
+        { value: '3', code: 'Digit3', name: 'value' },
+        { value: '4', code: 'Digit4', name: 'value' },
+        { value: '5', code: 'Digit5', name: 'value' },
+        { value: '6', code: 'Digit6', name: 'value' },
+        { value: '7', code: 'Digit7', name: 'value' },
+        { value: '8', code: 'Digit8', name: 'value' },
+        { value: '9', code: 'Digit9', name: 'value' },
+        { value: '', code: 'Space', name: 'code' },
+        { value: '', code: 'Tab', name: 'code' },
+        { value: '', code: 'Backspace', name: 'code' },
+        { value: '', code: 'Insert', name: 'code' },
+        { value: '', code: 'Delete', name: 'code' },
+        { value: '', code: 'Home', name: 'code' },
+        { value: '', code: 'End', name: 'code' },
+        { value: '', code: 'PageUp', name: 'code' },
+        { value: '', code: 'PageDown', name: 'code' },
+        { value: '', code: 'Enter', name: 'code' },
+        { value: '', code: 'Up', name: 'code' },
+        { value: '', code: 'Down', name: 'code' },
+        { value: '', code: 'Left', name: 'code' },
+        { value: '', code: 'Right', name: 'code' },
+        { value: 'num0', code: 'Numpad0', name: 'Numpad 0' },
+        { value: 'num1', code: 'Numpad1', name: 'Numpad 1' },
+        { value: 'num2', code: 'Numpad2', name: 'Numpad 2' },
+        { value: 'num3', code: 'Numpad3', name: 'Numpad 3' },
+        { value: 'num4', code: 'Numpad4', name: 'Numpad 4' },
+        { value: 'num5', code: 'Numpad5', name: 'Numpad 5' },
+        { value: 'num6', code: 'Numpad6', name: 'Numpad 6' },
+        { value: 'num7', code: 'Numpad7', name: 'Numpad 7' },
+        { value: 'num8', code: 'Numpad8', name: 'Numpad 8' },
+        { value: 'num9', code: 'Numpad9', name: 'Numpad 9' },
+        { value: 'numdec', code: 'NumpadDecimal', name: 'Numpad Decimal' },
+        { value: 'numadd', code: 'NumpadAdd', name: 'Numpad Add' },
+        { value: 'numsub', code: 'NumpadSubtract', name: 'Numpad Subtract' },
+        { value: 'nummult', code: 'NumpadMultiply', name: 'Numpad Multiply' },
+        { value: 'numdiv', code: 'NumpadDivide', name: 'Numpad Divide' },
+        { value: '', code: 'F1', name: 'code' },
+        { value: '', code: 'F2', name: 'code' },
+        { value: '', code: 'F3', name: 'code' },
+        { value: '', code: 'F4', name: 'code' },
+        { value: '', code: 'F5', name: 'code' },
+        { value: '', code: 'F6', name: 'code' },
+        { value: '', code: 'F7', name: 'code' },
+        { value: '', code: 'F8', name: 'code' },
+        { value: '', code: 'F9', name: 'code' },
+        { value: '', code: 'F10', name: 'code' },
+        { value: '', code: 'F11', name: 'code' },
+        { value: '', code: 'F12', name: 'code' },
+        { value: '', code: 'F13', name: 'code' },
+        { value: '', code: 'F14', name: 'code' },
+        { value: '', code: 'F15', name: 'code' },
+        { value: '', code: 'F16', name: 'code' },
+        { value: '', code: 'F17', name: 'code' },
+        { value: '', code: 'F18', name: 'code' },
+        { value: '', code: 'F19', name: 'code' },
+        { value: '', code: 'F20', name: 'code' },
+        { value: '', code: 'F21', name: 'code' },
+        { value: '', code: 'F22', name: 'code' },
+        { value: '', code: 'F23', name: 'code' },
+        { value: '', code: 'F24', name: 'code' },
+    ];
     let userData = {};
     let robotCheckInterval;
     // Connect to main websocket
@@ -106,7 +197,20 @@ window.addEventListener('load', async () => {
                 Object.keys(userData.versions).sort().forEach((key) => {
                     _id('components').innerHTML += `<span style="color: var(--fgDD)">${key}</span>&nbsp;&nbsp;&nbsp;${userData.versions[key]}<br>`;
                 });
-                _id('autoClickShortcut').innerText = userData.autoClick.shortcut.join(' + ');
+                _id('autoClickShortcut').innerText = (() => {
+                    let shortcutDisplay = [];
+                    let localKeys = keys;
+                    localKeys.push({ value: 'CommandOrControl', code: '', name: 'Ctrl' });
+                    localKeys.push({ value: 'Alt', code: '', name: 'value' });
+                    localKeys.push({ value: 'Shift', code: '', name: 'value' });
+                    userData.autoClick.shortcut.forEach((shortcutKey) => {
+                        localKeys.forEach((key) => {
+                            if (shortcutKey == key.value)
+                                shortcutDisplay.push(key.name.replace('value', key.value).replace('code', key.code));
+                        });
+                    });
+                    return shortcutDisplay.join(' + ');
+                })();
                 showSection('AutoClicker');
             }
             // Handle auto-click keyboard shortcut
@@ -234,97 +338,6 @@ window.addEventListener('load', async () => {
         //new Notification('Auto-clicking stopped!');
     });
     _id('autoClickChangeShortcut').addEventListener('click', () => {
-        let keys = [
-            { value: 'A', code: 'KeyA', name: 'value' },
-            { value: 'B', code: 'KeyB', name: 'value' },
-            { value: 'C', code: 'KeyC', name: 'value' },
-            { value: 'D', code: 'KeyD', name: 'value' },
-            { value: 'E', code: 'KeyE', name: 'value' },
-            { value: 'F', code: 'KeyF', name: 'value' },
-            { value: 'G', code: 'KeyG', name: 'value' },
-            { value: 'H', code: 'KeyH', name: 'value' },
-            { value: 'I', code: 'KeyI', name: 'value' },
-            { value: 'J', code: 'KeyJ', name: 'value' },
-            { value: 'K', code: 'KeyK', name: 'value' },
-            { value: 'L', code: 'KeyL', name: 'value' },
-            { value: 'M', code: 'KeyM', name: 'value' },
-            { value: 'N', code: 'KeyN', name: 'value' },
-            { value: 'O', code: 'KeyO', name: 'value' },
-            { value: 'P', code: 'KeyP', name: 'value' },
-            { value: 'Q', code: 'KeyQ', name: 'value' },
-            { value: 'R', code: 'KeyR', name: 'value' },
-            { value: 'S', code: 'KeyS', name: 'value' },
-            { value: 'T', code: 'KeyT', name: 'value' },
-            { value: 'U', code: 'KeyU', name: 'value' },
-            { value: 'V', code: 'KeyV', name: 'value' },
-            { value: 'W', code: 'KeyW', name: 'value' },
-            { value: 'X', code: 'KeyX', name: 'value' },
-            { value: 'Y', code: 'KeyY', name: 'value' },
-            { value: 'Z', code: 'KeyZ', name: 'value' },
-            { value: '0', code: 'Digit0', name: 'value' },
-            { value: '1', code: 'Digit1', name: 'value' },
-            { value: '2', code: 'Digit2', name: 'value' },
-            { value: '3', code: 'Digit3', name: 'value' },
-            { value: '4', code: 'Digit4', name: 'value' },
-            { value: '5', code: 'Digit5', name: 'value' },
-            { value: '6', code: 'Digit6', name: 'value' },
-            { value: '7', code: 'Digit7', name: 'value' },
-            { value: '8', code: 'Digit8', name: 'value' },
-            { value: '9', code: 'Digit9', name: 'value' },
-            { value: '', code: 'Space', name: 'code' },
-            { value: '', code: 'Tab', name: 'code' },
-            { value: '', code: 'Backspace', name: 'code' },
-            { value: '', code: 'Insert', name: 'code' },
-            { value: '', code: 'Delete', name: 'code' },
-            { value: '', code: 'Home', name: 'code' },
-            { value: '', code: 'End', name: 'code' },
-            { value: '', code: 'PageUp', name: 'code' },
-            { value: '', code: 'PageDown', name: 'code' },
-            { value: '', code: 'Enter', name: 'code' },
-            { value: '', code: 'Up', name: 'code' },
-            { value: '', code: 'Down', name: 'code' },
-            { value: '', code: 'Left', name: 'code' },
-            { value: '', code: 'Right', name: 'code' },
-            { value: 'num0', code: 'Numpad0', name: 'Numpad 0' },
-            { value: 'num1', code: 'Numpad1', name: 'Numpad 1' },
-            { value: 'num2', code: 'Numpad2', name: 'Numpad 2' },
-            { value: 'num3', code: 'Numpad3', name: 'Numpad 3' },
-            { value: 'num4', code: 'Numpad4', name: 'Numpad 4' },
-            { value: 'num5', code: 'Numpad5', name: 'Numpad 5' },
-            { value: 'num6', code: 'Numpad6', name: 'Numpad 6' },
-            { value: 'num7', code: 'Numpad7', name: 'Numpad 7' },
-            { value: 'num8', code: 'Numpad8', name: 'Numpad 8' },
-            { value: 'num9', code: 'Numpad9', name: 'Numpad 9' },
-            { value: 'numdec', code: 'NumpadDecimal', name: 'Numpad Decimal' },
-            { value: 'numadd', code: 'NumpadAdd', name: 'Numpad Add' },
-            { value: 'numsub', code: 'NumpadSubtract', name: 'Numpad Subtract' },
-            { value: 'nummult', code: 'NumpadMultiply', name: 'Numpad Multiply' },
-            { value: 'numdiv', code: 'NumpadDivide', name: 'Numpad Divide' },
-            { value: '', code: 'F1', name: 'code' },
-            { value: '', code: 'F2', name: 'code' },
-            { value: '', code: 'F3', name: 'code' },
-            { value: '', code: 'F4', name: 'code' },
-            { value: '', code: 'F5', name: 'code' },
-            { value: '', code: 'F6', name: 'code' },
-            { value: '', code: 'F7', name: 'code' },
-            { value: '', code: 'F8', name: 'code' },
-            { value: '', code: 'F9', name: 'code' },
-            { value: '', code: 'F10', name: 'code' },
-            { value: '', code: 'F11', name: 'code' },
-            { value: '', code: 'F12', name: 'code' },
-            { value: '', code: 'F13', name: 'code' },
-            { value: '', code: 'F14', name: 'code' },
-            { value: '', code: 'F15', name: 'code' },
-            { value: '', code: 'F16', name: 'code' },
-            { value: '', code: 'F17', name: 'code' },
-            { value: '', code: 'F18', name: 'code' },
-            { value: '', code: 'F19', name: 'code' },
-            { value: '', code: 'F20', name: 'code' },
-            { value: '', code: 'F21', name: 'code' },
-            { value: '', code: 'F22', name: 'code' },
-            { value: '', code: 'F23', name: 'code' },
-            { value: '', code: 'F24', name: 'code' },
-        ];
         let id = showPopup(`Configure shortcut`, `
             <div class="flex verticalCenter">
                 <div>
@@ -339,8 +352,7 @@ window.addEventListener('load', async () => {
                         <div id="keyInputCont">&nbsp;</div>
                     </div>
                     <div style="margin-top: 5px">
-                        <small id="modifierWarning" class="hidden" style="color: var(--fgErr);">This key requires a modifier.</small>
-                        <small id="badKeyWarning" class="hidden" style="color: var(--fgErr);">Sorry, <span id="badKeyCode"></span> isn't supported.</small>
+                        <small id="keybindError" class="hidden" style="color: var(--fgErr);"></small>
                     </div>
                 </div>
             </div>
@@ -376,10 +388,11 @@ window.addEventListener('load', async () => {
             if (selValue !== '') {
                 finalShortcut.push(selValue);
                 if (selValue.match(/^([A-Z0-9]|Enter|Backspace|Space)$/) && finalShortcut.length == 1) {
-                    _id('modifierWarning').classList.remove('hidden');
+                    _id('keybindError').innerText = `This key requires a modifier.`;
+                    _id('keybindError').classList.remove('hidden');
                     _id('commitKeybind').disabled = true;
                 } else {
-                    _id('modifierWarning').classList.add('hidden');
+                    _id('keybindError').classList.add('hidden');
                     _id('commitKeybind').disabled = false;
                 }
             }
@@ -395,11 +408,22 @@ window.addEventListener('load', async () => {
             if (pressedKey) {
                 selName = pressedKey.name.replace('code', pressedKey.code).replace('value', pressedKey.value);
                 selValue = ((pressedKey.value === '') ? pressedKey.code : pressedKey.value);
-                _id('badKeyWarning').classList.add('hidden');
+                _id('keybindError').classList.add('hidden');
                 updateShownInput();
             } else {
-                _id('badKeyCode').innerText = event.code;
-                _id('badKeyWarning').classList.remove('hidden');
+                if (event.code.match(/^(Command|Control)(Left|Right)$/)) {
+                    _id('keybindCtrl').click();
+                    _id('keybindCtrl').dispatchEvent('click');
+                } else if (event.code.match(/^(Alt)(Left|Right)$/)) {
+                    _id('keybindAlt').click();
+                    _id('keybindAlt').dispatchEvent('click');
+                }  else if (event.code.match(/^(Shift)(Left|Right)$/)) {
+                    _id('keybindShift').click();
+                    _id('keybindShift').dispatchEvent('click');
+                } else {
+                    _id('keybindError').innerText = `Sorry, ${event.code} isn't supported.`;
+                    _id('keybindError').classList.remove('hidden');
+                }
             }
         };
         window.addEventListener('keyup', handleInput);
@@ -411,5 +435,12 @@ window.addEventListener('load', async () => {
 
     _id('openDataFolder').addEventListener('click', () => {
         wsSend({ to: 'main', action: 'openDataFolder' });
+    });
+
+    let mouseX = 0;
+    let mouseY = 0;
+    window.addEventListener('mousemove', (event) => {
+        mouseX = event.clientX;
+        mouseY = event.clientY;
     });
 });

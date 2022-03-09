@@ -37,6 +37,7 @@
 }
 
 :root {
+    --bgDD: #121314;
     --bgD: #1a1b1d;
     --bg: #202124;
     --bgL: #292a2e;
@@ -193,6 +194,9 @@ span {
     align-items: center;
     transition: 0.1s ease-in-out;
 }
+#sidebar .item:disabled {
+    pointer-events: none;
+}
 #sidebar .item .indicator {
     margin-left: -6px;
     margin-right: 10px;
@@ -346,6 +350,7 @@ span {
     border-radius: 6px;
     transition: 0.1s ease-in-out;
 }
+.btn:disabled { pointer-events: none; }
 .btn:hover:not(:disabled),
 .btn:focus:not(:disabled) {
     background: var(--fgD);
@@ -377,6 +382,7 @@ span {
     transition: 0.1s ease-in-out;
 }
 .textbox::-webkit-inner-spin-button { -webkit-appearance: none; }
+.textbox:disabled { pointer-events: none; }
 
 .textbox:hover {
     border-color: var(--bgLL);

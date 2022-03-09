@@ -42,7 +42,7 @@ app.on('ready', () => {
         dataDir: dataDir,  
         versions: process.versions,
         autoClick: {
-            shortcut: ['Ctrl', 'Alt', 'A']
+            shortcut: ['CommandOrControl', 'Alt', 'A']
         }
     };
     if (fs.existsSync(path.join(dataDir, 'settings.json'))) {
