@@ -1,6 +1,6 @@
 {
   "name": "input-tools",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "A set of tools for automating mouse and keyboard clicks.",
   "main": "main.js",
   "scripts": {

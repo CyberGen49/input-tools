@@ -7,9 +7,7 @@
     <title>Auto-clicking is active</title>
 </head>
 <body>
-    <div id="card">
-        Input Tools auto-clicker is active. Press <span id="shortcut">your shortcut</span> to stop.
-    </div>
+    <div id="card"></div>
 </body>
 <style>
     @font-face {
@@ -38,4 +36,21 @@
         border-radius: 12px;
     }
 </style>
+<script>
+    window.addEventListener('load', () => {
+        const ws = new WebSocket(`ws://localhost:31264`);
+        ws.addEventListener('open', () => {
+            console.log(`Connected to main websocket`);
+        });
+        ws.addEventListener('message', (event) => {
+            const data = JSON.parse(event.data);
+            if (data.to == 'overlay') {
+                if (data.action == 'setMessage') {
+                    document.getElementById('card').innerHTML = data.html;
+                }
+                console.log('WS:', data);
+            }
+        });
+    });
+</script>
 </html>

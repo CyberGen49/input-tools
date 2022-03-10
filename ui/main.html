@@ -13,7 +13,7 @@
             <div class="controlBtn" id="windowMin" style="transform: rotate(180deg);" title="Minimize">
                 maximize
             </div>
-            <div class="controlBtn hidden" id="windowMax" title="Maximize/unmaximize">
+            <div class="controlBtn hidden" id="windowMax" title="Toggle maximize">
                 check_box_outline_blank
             </div>
             <div class="controlBtn" id="windowClose" title="Exit">
@@ -23,28 +23,28 @@
     </div>
     <div id="sidebar">
         <div class="title">Input Tools</div>
-        <button id="tabAutoClicker" class="item">
+        <button id="tabAutoClicker" class="item" title="Automatically click the mouse on a specified interval.">
             <div class="indicator"></div>
             <div class="icon">mouse</div>
             <div class="name">Auto-clicker</div>
         </button>
-        <button id="tabMacros" class="item" disabled title="This tool isn't ready yet">
+        <div title="This tool isn't ready yet!"><button id="tabMacros" class="item" disabled>
             <div class="indicator"></div>
             <div class="icon">keyboard_alt</div>
             <div class="name">Keyboard macros</div>
-        </button>
-        <button id="tabRecorder" class="item" disabled title="This tool isn't ready yet">
+        </button></div>
+        <div title="This tool isn't ready yet!"><button id="tabRecorder" class="item" disabled>
             <div class="indicator"></div>
             <div class="icon">fiber_smart_record</div>
             <div class="name">Input recorder</div>
-        </button>
+        </button></div>
         <div class="separator"></div>
-        <button id="tabSettings" class="item">
+        <button id="tabSettings" class="item" title="Configure various aspects of Input Tools.">
             <div class="indicator"></div>
             <div class="icon">settings</div>
             <div class="name">Settings</div>
         </button>
-        <button id="tabAbout" class="item">
+        <button id="tabAbout" class="item" title="Learn about Input Tools">
             <div class="indicator"></div>
             <div class="icon">info</div>
             <div class="name">About</div>
@@ -54,7 +54,7 @@
         <div id="sectionAutoClicker" class="section">
             <h2>Auto-clicker</h2>
             <div class="flex row centerVertical">
-                <div style="width: 180px">Click interval</div>
+                <div style="width: 180px" title="The mouse will be automatically clicked this often.">Click interval</div>
                 <div style="width: 90px">
                     <input id="autoClickInterval" type="number" class="textbox" value="100">
                 </div>
@@ -68,7 +68,7 @@
                 </div>
             </div>
             <div class="flex row centerVertical">
-                <div style="width: 180px">Mouse button</div>
+                <div style="width: 180px" title="This is the mouse button that will be clicked.">Mouse button</div>
                 <div class="inputWrapper dropdown" style="width: 130px">
                     <select id="autoClickButton" class="textbox">
                         <option value="left" selected>Left</option>
@@ -78,17 +78,17 @@
                 </div>
             </div>
             <div class="flex row centerVertical">
-                <div style="width: 180px">Click type</div>
+                <div style="width: 180px" title="This changes the type of click to perform.">Click type</div>
                 <div class="inputWrapper dropdown" style="width: 130px">
                     <select id="autoClickType" class="textbox">
                         <option value="false">Single</option>
                         <option value="true">Double</option>
-                        <option value="3">Hold</option>
+                        <!-- <option value="3">Hold</option> -->
                     </select>
                 </div>
             </div>
             <div class="flex row centerVertical">
-                <div style="width: 180px">Timeout</div>
+                <div style="width: 180px" title="The auto-clicker will deactivate after this long.">Timeout</div>
                 <div id="autoClickTimeoutCont" class="hidden" style="width: 90px;">
                     <input id="autoClickTimeout" type="number" class="textbox" value="1">
                 </div>
@@ -102,7 +102,7 @@
                 </div>
             </div>
             <div class="flex row centerVertical">
-                <div style="width: 180px">Shortcut</div>
+                <div style="width: 180px" title="You can press this keyboard shortcut anywhere to toggle the auto-clicker.">Shortcut</div>
                 <div>
                     <div id="autoClickShortcut" class="textbox flex centerVertical" disabled>...</div>
                 </div>
@@ -120,9 +120,9 @@
         </div>
         <div id="sectionSettings" class="section">
             <h2>Settings</h2>
-            <button id="autoClickPopupEnabled" class="checkbox"><div>
+            <button id="autoClickPopupEnabled" class="checkbox selected"><div>
                 <div>Auto-clicker overlay</div>
-                <div><small>Show a notification at the bottom of the screen while the auto-clicker is active.</small></div>
+                <div><small>Show an overlay at the bottom of the screen when the auto-clicker is active.</small></div>
             </div></button>
         </div>
         <div id="sectionAbout" class="section">
@@ -143,6 +143,7 @@
             <p id="components" style="color: var(--fgD)"></p>
         </div>
     </div>
+    <div id="tooltip"></div>
     <script src="main.js"></script>
 </body>
 </html>

@@ -193,25 +193,39 @@ window.addEventListener('load', async () => {
             // Handle user data response
             if (data.action == 'userData') {
                 userData = data.data;
-                _id('userDataDir').innerText = userData.dataDir;
-                Object.keys(userData.versions).sort().forEach((key) => {
-                    _id('components').innerHTML += `<span style="color: var(--fgDD)">${key}</span>&nbsp;&nbsp;&nbsp;${userData.versions[key]}<br>`;
+                // Restore input values
+                Object.keys(userData.inputs).forEach((id) => {
+                    let el = _id(id);
+                    if (el.tagName.match(/^(INPUT|SELECT)$/)) {
+                        el.value = userData.inputs[id];
+                        el.dispatchEvent(new Event('change'));
+                    } else if (el.classList.contains('checkbox')) {
+                        if (userData.inputs[id]) el.classList.add('selected');
+                        else el.classList.remove('selected');
+                    }
                 });
-                _id('autoClickShortcut').innerText = (() => {
+                // Set the auto-clicker shortcut display
+                _id('autoClickShortcut').innerHTML = (() => {
                     let shortcutDisplay = [];
-                    let localKeys = keys;
+                    let localKeys = JSON.parse(JSON.stringify(keys));
                     localKeys.push({ value: 'CommandOrControl', code: '', name: 'Ctrl' });
                     localKeys.push({ value: 'Alt', code: '', name: 'value' });
                     localKeys.push({ value: 'Shift', code: '', name: 'value' });
-                    userData.autoClick.shortcut.forEach((shortcutKey) => {
+                    userData.shortcuts.autoClick.forEach((shortcutKey) => {
                         localKeys.forEach((key) => {
-                            if (shortcutKey == key.value)
+                            if (shortcutKey == key.value || shortcutKey == key.code) {
                                 shortcutDisplay.push(key.name.replace('value', key.value).replace('code', key.code));
+                            }
                         });
                     });
                     return shortcutDisplay.join(' + ');
                 })();
-                showSection('AutoClicker');
+                // Set values displayed in About
+                _id('userDataDir').innerText = userData.dataDir;
+                _id('components').innerHTML = '';
+                Object.keys(userData.versions).sort().forEach((key) => {
+                    _id('components').innerHTML += `<span style="color: var(--fgDD)">${key}</span>&nbsp;&nbsp;&nbsp;${userData.versions[key]}<br>`;
+                });
             }
             // Handle auto-click keyboard shortcut
             if (data.action == 'toggleAutoClick') {
@@ -223,7 +237,10 @@ window.addEventListener('load', async () => {
             // Handle auto-click status responses
             if (data.action == 'autoClickStarted') {
                 _id('autoClickStop').disabled = false;
-                wsSend({ to: 'main', action: 'showAutoClickPopup' });
+                if (_id('autoClickPopupEnabled').classList.contains('selected')) {
+                    wsSend({ to: 'overlay', action: 'setMessage', html: `Input Tools auto-clicker is active. Press <b>${_id('autoClickShortcut').innerText}</b> to stop.` });
+                    wsSend({ to: 'main', action: 'showAutoClickPopup' });
+                }
             }
             if (data.action == 'autoClickStopped') {
                 _id('autoClickStop').disabled = true;
@@ -287,15 +304,50 @@ window.addEventListener('load', async () => {
             showSection(section);
         });
     });
+    showSection('AutoClicker');
+
+    // Handle tooltips
+    let titleEls = document.querySelectorAll('[title]');
+    for (const el of titleEls) {
+        let html = el.title;
+        el.removeAttribute('title');
+        el.addEventListener('mouseover', () => {
+            _id('tooltip').innerHTML = html;
+            _id('tooltip').classList.add('visible');
+        });
+        el.addEventListener('mouseleave', () => {
+            _id('tooltip').classList.remove('visible');
+        });
+        console.log('t');
+    }
+    let mouseX = 0;
+    let mouseY = 0;
+    window.addEventListener('mousemove', (event) => {
+        mouseX = event.clientX;
+        mouseY = event.clientY;
+        const tooltip = _id('tooltip');
+        const tooltipRect = tooltip.getBoundingClientRect();
+        if ((mouseX+tooltipRect.width) >= (window.innerWidth-10)) {
+            tooltip.style.left = `${mouseX-tooltipRect.width}px`;
+            tooltip.style.marginRight = `-4px`;
+        } else {
+            tooltip.style.left = `${mouseX}px`;
+            tooltip.style.marginLeft = `4px`;
+        }
+        tooltip.style.marginTop = `4px`;
+        tooltip.style.top = `${mouseY}px`;
+    });
 
     // Handle the auto clicker
     ['autoClickInterval', 'autoClickTimeout'].forEach((id) => {
-        _id(id).addEventListener('change', (el) => {
-            el = el.target;
-            let value = el.value;
-            let valueInt = parseInt(value);
-            if (value === '' || valueInt < 1) el.value = 1;
-            if (valueInt > 100000) el.value = 99999;
+        ['keyup', 'change'].forEach((eType) => {
+            _id(id).addEventListener(eType, (el) => {
+                el = el.target;
+                let value = el.value;
+                let valueInt = parseInt(value);
+                if (value === '' || valueInt < 1) el.value = 1;
+                if (valueInt > 100000) el.value = 99999;
+            });
         });
     });
     _id('autoClickTimeoutUnit').addEventListener('change', (el) => {
@@ -428,19 +480,36 @@ window.addEventListener('load', async () => {
         };
         window.addEventListener('keyup', handleInput);
         _id('commitKeybind').addEventListener('click', () => {
-            console.log(`Final shortcut:`, finalShortcut.join('+'));
+            console.log(`Final shortcut:`, finalShortcut);
+            userData.shortcuts.autoClick = finalShortcut;
+            writeDataChanges(true);
             _id(id).click();
         });
     });
 
-    _id('openDataFolder').addEventListener('click', () => {
-        wsSend({ to: 'main', action: 'openDataFolder' });
+    // Handle saving user data to file
+    let lastDataSend = 0;
+    const writeDataChanges = (reRegisterShortcuts = false) => {
+        if ((Date.now()-lastDataSend) < 200) return;
+        wsSend({ to: 'main', action: 'saveData', data: userData, reRegisterShortcuts: reRegisterShortcuts });
+        lastDataSend = Date.now();
+    };
+    ['autoClickInterval', 'autoClickUnit', 'autoClickButton', 'autoClickType', 'autoClickTimeout', 'autoClickTimeoutUnit', 'autoClickPopupEnabled'].forEach((id) => {
+        let el = _id(id);
+        if (el.tagName.match(/^(INPUT|SELECT)$/)) {
+            el.addEventListener('change', () => {
+                userData.inputs[id] = el.value;
+                writeDataChanges();
+            });
+        } else if (el.classList.contains('checkbox')) {
+            el.addEventListener('click', () => {
+                userData.inputs[id] = el.classList.contains('selected');
+                writeDataChanges();
+            });
+        }
     });
 
-    let mouseX = 0;
-    let mouseY = 0;
-    window.addEventListener('mousemove', (event) => {
-        mouseX = event.clientX;
-        mouseY = event.clientY;
+    _id('openDataFolder').addEventListener('click', () => {
+        wsSend({ to: 'main', action: 'openDataFolder' });
     });
 });

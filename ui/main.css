@@ -326,6 +326,26 @@ span {
     padding: 0px 15px 17px 15px;
 }
 
+#tooltip {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    max-width: 300px;
+    padding: 8px 12px;
+    line-height: 120%;
+    font-size: 14px;
+    background: var(--bgDD);
+    border-radius: 12px;
+    opacity: 0;
+    transition: opacity 0.1s ease-in-out;
+    z-index: 200;
+    pointer-events: none;
+    box-shadow: 0px 0px 50px 14px rgba(0,0,0,0.2);
+}
+#tooltip.visible {
+    opacity: 1;
+}
+
 #keyInputCont {
     padding: 8px 12px;
     font-family: "Quicksand";

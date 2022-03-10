@@ -34,23 +34,25 @@ app.on('ready', () => {
     app.setAppUserModelId('org.simplecyber.inputTools');
     const primaryDisplay = screen.getPrimaryDisplay();
     const dataDir = app.getPath('userData');
+    const dataFile = path.join(dataDir, 'settings.json');
     // Compile user data
-    let targetStructureVersion = 1;
     let userData = {
-        structureVersion: targetStructureVersion,
-            // If the version of the settings file doesn't match, we won't load it
-        dataDir: dataDir,  
-        versions: process.versions,
-        autoClick: {
-            shortcut: ['CommandOrControl', 'Alt', 'A']
+        inputs: {},
+        shortcuts: {
+            autoClick: ['CommandOrControl', 'Alt', 'A']
         }
     };
-    if (fs.existsSync(path.join(dataDir, 'settings.json'))) {
-        let dataFromFile = JSON.stringify(fs.readFileSync(path.join(dataDir, 'settings.json')));
-        if (dataFromFile.structureVersion === targetStructureVersion) {
-            mergeDeep(userData, dataFromFile);
-            console.log(clc.greenBright('Main:'), `Loaded data from settings.json`);
-        } console.log(clc.greenBright('Main:'), `settings.json doesn't match targetStructureVersion, so it wasn't loaded`);
+    // If the settings file exists
+    if (fs.existsSync(dataFile)) {
+        // Load the file
+        let dataFromFile = JSON.parse(fs.readFileSync(dataFile, 'utf-8'));
+        // Merge contents
+        Object.assign(userData.inputs, dataFromFile.inputs);
+        Object.assign(userData.shortcuts, dataFromFile.shortcuts);
+        // Add extra data
+        userData.dataDir = dataDir;
+        userData.versions = process.versions;
+        console.log(clc.greenBright('Main:'), `Loaded data from settings.json`);
     } else console.log(clc.greenBright('Main:'), `settings.json doesn't exist, so no data was loaded`);
 
     // Build the main window
@@ -94,7 +96,8 @@ app.on('ready', () => {
     overlay.setAlwaysOnTop(true, 'floating');
     overlay.setIgnoreMouseEvents(true);
     overlay.loadFile('overlay/main.html');
-    
+    //overlay.webContents.openDevTools();
+
     // Create main websocket
     const wssPort = 31264;
     const wss = new WebSocketServer({ port: wssPort });
@@ -125,6 +128,22 @@ app.on('ready', () => {
                 // Handle sending user data to renderer
                 if (data.action == 'getData') {
                     wss.broadcast({ to: 'renderer', action: 'userData', data: userData });
+                }
+                // Handle saving data sent from renderer
+                if (data.action == 'saveData') {
+                    userData = data.data;
+                    let dataToSave = {}
+                    dataToSave.inputs = userData.inputs;
+                    dataToSave.shortcuts = userData.shortcuts;
+                    fs.writeFile(dataFile, JSON.stringify(dataToSave), (err) => {
+                        if (err) {
+                            console.log(clc.greenBright('Main:'), `Error writing user data to file:`, err);
+                            return
+                        }
+                        console.log(clc.greenBright('Main:'), `Saved user data to file`);
+                        if (data.reRegisterShortcuts) registerShortcuts();
+                        wss.broadcast({ to: 'renderer', action: 'userData', data: userData });
+                    });
                 }
                 // Handle opening the data folder
                 if (data.action == 'openDataFolder') {
@@ -158,18 +177,18 @@ app.on('ready', () => {
     // Handle global keyboard shortcuts
     const registerShortcuts = () => {
         globalShortcut.unregisterAll();
-        const registerShortcut = (accelerator, callback) => {
-            if (globalShortcut.register(accelerator, callback))
-                console.log(clc.greenBright('Main:'), `Registered shortcut ${accelerator}`);
-            else
-                console.log(clc.greenBright('Main:'), `Failed to register shortcut ${accelerator}`);
-        }
-        try {
-            let accelerator = userData.autoClick.shortcut.join('+');
-            registerShortcut(accelerator, () => {
+        let shortcutNames = Object.keys(userData.shortcuts);
+        shortcutNames.forEach((name) => {
+            const accelerator = userData.shortcuts[name].join('+');
+            let callback = () => {};
+            if (name == 'autoClick') callback = () => {
                 wss.broadcast({ to: 'renderer', action: 'toggleAutoClick' });
-            });
-        } catch (error) {}
+            };
+            if (globalShortcut.register(accelerator, callback))
+                console.log(clc.greenBright('Main:'), `Bound ${name} shortcut to ${accelerator}`);
+            else
+                console.log(clc.greenBright('Main:'), `Failed to bind ${name} shortcut to ${accelerator}`);
+        });
     };
     registerShortcuts();
 });
