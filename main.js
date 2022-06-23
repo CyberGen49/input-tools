@@ -37,6 +37,8 @@ app.on('ready', () => {
     const dataFile = path.join(dataDir, 'settings.json');
     // Compile user data
     let userData = {
+        dataDir: dataDir,
+        versions: process.versions,
         inputs: {},
         shortcuts: {
             autoClick: ['CommandOrControl', 'Alt', 'A']
@@ -49,9 +51,6 @@ app.on('ready', () => {
         // Merge contents
         Object.assign(userData.inputs, dataFromFile.inputs);
         Object.assign(userData.shortcuts, dataFromFile.shortcuts);
-        // Add extra data
-        userData.dataDir = dataDir;
-        userData.versions = process.versions;
         console.log(clc.greenBright('Main:'), `Loaded data from settings.json`);
     } else console.log(clc.greenBright('Main:'), `settings.json doesn't exist, so no data was loaded`);
 
